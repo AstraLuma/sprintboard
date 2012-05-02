@@ -1,0 +1,17 @@
+{
+  "author": "James Bliss <jamesbliss@grcc.edu>",
+  "name": "sprintboard",
+  "description": "An HTML-based dashboard",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/astronouth7303/sprintboard.git"
+  },
+  "main": "sprintboard.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
