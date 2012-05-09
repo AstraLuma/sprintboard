@@ -8,7 +8,7 @@ Manager = {
         var child = cproc.spawn("TODO");
         child.on('exit' function(code, signal) {
             if (!this.shuttingdown) {
-                //TODO: Restart
+                //TODO: Throttle? and Restart
             }
         });
         child.stdout.on('data', function(data) {
@@ -19,5 +19,11 @@ Manager = {
         });
         child.stdin.write(config);
         child.stdin.destroySoon();
-    }
+    },
+    reload: function(name) {
+        //TODO: Reload process(es)
+    },
+    destroy: function() {
+        //TODO: SIGQUIT all children
+    },
 }
