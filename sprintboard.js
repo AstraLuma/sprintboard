@@ -11,7 +11,9 @@ app.get(/^(\/.*)$/, function(req, res) {
     res.sendfile(__dirname + '/static/index.html');
 });
 
-var AllSockets = [];
+function SendCommand(name) {
+    io.sockets.emit("command", name);
+}
 
 io.sockets.on('connection', function(socket) {
     function set(name, value) {
@@ -22,13 +24,8 @@ io.sockets.on('connection', function(socket) {
     }
     Values.on('set', set);
     Values.on('del', del);
-    AllSockets.push(socket);
     socket.on('disconnect', function() {
     	Values.removeListener('set', set);
     	Values.removeListener('del', del);
-        var i = AllSockets.indexOf(socket);
-        if (i != -1) {
-            delete AllSockets[i];
-        }
     });
 });
