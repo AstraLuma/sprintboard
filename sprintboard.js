@@ -1,13 +1,15 @@
 #!/usr/bin/node
-var app = require('connect')()
-  , io = require('socket.io').listen(app)
+var connect = require('connect')
+  , app = connect()
+  , server = app.listen(process.env.PORT || 80)
+  , io = require('socket.io').listen(server)
   , valuetree = require('./valuetree.js')
   , BackMan = require('./backends.js').Manager;
 
 var Values = new valuetree.ValueTree();
 
 app.use(
-    require('connect').static(__dirname + '/static')
+    connect.static(__dirname + '/static')
 );
 
 function SendCommand(name) {
@@ -37,4 +39,3 @@ Values.on('del', function(name) {
     });
 });*/
 
-app.listen(process.env.PORT || 80);
