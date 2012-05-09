@@ -9,7 +9,7 @@
   },
   "main": "sprintboard",
   "dependencies": {
-      "express": "*",
+      "connect": "*",
       "socket.io": "*"
   },
   "devDependencies": {},

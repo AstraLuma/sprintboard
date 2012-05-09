@@ -6,7 +6,7 @@ Manager = {
     start: function(name) {
         var config = {}; //TODO: Load config
         var child = cproc.spawn("TODO");
-        child.on('exit' function(code, signal) {
+        child.on('exit', function(code, signal) {
             if (!this.shuttingdown) {
                 //TODO: Throttle? and Restart
             }
@@ -14,11 +14,14 @@ Manager = {
         child.stdout.on('data', function(data) {
             //TODO: Buffer, parse, emit
         });
-        child.stderr.on('data' function(data) {
+        child.stderr.on('data', function(data) {
             //TODO: Buffer, log
         });
         child.stdin.write(config);
         child.stdin.destroySoon();
+    },
+    startAll: function() {
+        // TODO: Find and start
     },
     reload: function(name) {
         //TODO: Reload process(es)

@@ -1,21 +1,28 @@
 #!/usr/bin/node
-var app = require('express').createServer()
+var app = require('connect')()
   , io = require('socket.io').listen(app)
-  , valuetree = require('./valuetree.js');
+  , valuetree = require('./valuetree.js')
+  , BackMan = require('./backends.js').Manager;
 
 var Values = new valuetree.ValueTree();
 
-app.listen(process.env.PORT || 80);
-
-app.get(/^(\/.*)$/, function(req, res) {
-    res.sendfile(__dirname + '/static/index.html');
-});
+app.use(
+    require('connect').static(__dirname + '/static')
+);
 
 function SendCommand(name) {
     io.sockets.emit("command", name);
 }
 
-io.sockets.on('connection', function(socket) {
+Values.on('set', function(name, value) {
+    io.sockets.emit('set', name, value);
+});
+
+Values.on('del', function(name) {
+    io.sockets.emit('del', name);
+});
+
+/*io.sockets.on('connection', function(socket) {
     function set(name, value) {
     	socket.emit('set', name, value);
     }
@@ -28,4 +35,6 @@ io.sockets.on('connection', function(socket) {
     	Values.removeListener('set', set);
     	Values.removeListener('del', del);
     });
-});
+});*/
+
+app.listen(process.env.PORT || 80);
