@@ -7,8 +7,11 @@
     "type": "git",
     "url": "git://github.com/astronouth7303/sprintboard.git"
   },
-  "main": "sprintboard.js",
-  "dependencies": {},
+  "main": "sprintboard",
+  "dependencies": {
+      "express": "*",
+      "socket.io": "*"
+  },
   "devDependencies": {},
   "optionalDependencies": {},
   "engines": {
