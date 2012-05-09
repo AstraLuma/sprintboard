@@ -1,16 +1,34 @@
 #!/usr/bin/node
 var app = require('express').createServer()
-  , io = require('socket.io').listen(app);
+  , io = require('socket.io').listen(app)
+  , valuetree = require('./valuetree.js');
 
-app.listen(8080);
+var Values = new valuetree.ValueTree();
 
-app.get(/^(\/.*)$/, function (req, res) {
+app.listen(process.env.PORT || 80);
+
+app.get(/^(\/.*)$/, function(req, res) {
     res.sendfile(__dirname + '/static/index.html');
 });
 
-io.sockets.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-        console.log(data);
+var AllSockets = [];
+
+io.sockets.on('connection', function(socket) {
+    function set(name, value) {
+    	socket.emit('set', name, value);
+    }
+    function del(name) {
+        socket.emit('set', name);
+    }
+    Values.on('set', set);
+    Values.on('del', del);
+    AllSockets.push(socket);
+    socket.on('disconnect', function() {
+    	Values.removeListener('set', set);
+    	Values.removeListener('del', del);
+        var i = AllSockets.indexOf(socket);
+        if (i != -1) {
+            delete AllSockets[i];
+        }
     });
 });

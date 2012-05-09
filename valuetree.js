@@ -1,8 +1,7 @@
 // -*- tab-width: 4; use-tabs: 1; coding: utf-8 -*-
-
 var events = require('events');
 
-module.exports = ValueTree;
+exports.ValueTree = ValueTree;
 
 function ValueItem(name, value) {
 	this.name = name;
@@ -36,6 +35,26 @@ ValueTree.prototype = Object.create(events.EventEmitter.prototype,
 		}
 		return cur;
 	},
+	basename: function(name) {
+		return name.match(/[^\/]+$/)[0];
+	},
+	dirname: function(name) {
+		return name.replace(/\/[^\/]+$/, "");
+	},
+	join: function() {
+		var items;
+		if (arguments.length == 1 && typeof arguments[0] != "string") {
+			items = arguments[0];
+		} else {
+			items = arguments;
+		}
+		var rv = items[0];
+		for (var i in items) {
+			if (i == 0) continue;
+			rv += '/' + items[i];
+		}
+		return rv;
+	},
 	get: function(name) {
 		return this._item(name).value;
 	},
@@ -57,14 +76,15 @@ ValueTree.prototype = Object.create(events.EventEmitter.prototype,
 		var node = this._item(name);
 		if (node.value != value) {
 			node.value = value;
-			//TODO: Raise event
+			this.emit("set", name, value);
 		}
 	},
 	del: function(name) {
 		var node = this._item(name);
 		if (node) {
-			//TODO: Delete
-			//TODO: Raise event
+			var parent = this._item(this.dirname(name));
+			delete parent.kids[this.basename(name)];
+			this.emit("del", name);
 		}
 	},
 });
