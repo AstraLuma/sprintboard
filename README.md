@@ -1,3 +1,5 @@
+This project is dead.
+
 SprintBoard
 ===========
 
